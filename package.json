@@ -1,0 +1,32 @@
+{
+  "name": "mini-dokploy",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "check-types": "turbo check-types",
+    "dev:web": "turbo -F web dev",
+    "db:push": "turbo -F @mini-dokploy/db db:push",
+    "db:studio": "turbo -F @mini-dokploy/db db:studio",
+    "db:generate": "turbo -F @mini-dokploy/db db:generate",
+    "db:migrate": "turbo -F @mini-dokploy/db db:migrate",
+    "db:local": "turbo -F @mini-dokploy/db db:local"
+  },
+  "dependencies": {
+    "@mini-dokploy/env": "workspace:*",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@mini-dokploy/config": "workspace:*",
+    "@types/node": "^22.13.14",
+    "turbo": "^2.8.12",
+    "typescript": "catalog:"
+  },
+  "packageManager": "pnpm@10.18.3"
+}

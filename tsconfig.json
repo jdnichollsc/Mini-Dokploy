@@ -1,0 +1,3 @@
+{
+  "extends": "@mini-dokploy/config/tsconfig.base.json"
+}

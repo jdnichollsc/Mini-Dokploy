@@ -1,0 +1,24 @@
+{
+  "name": "@mini-dokploy/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@mini-dokploy/db": "workspace:*",
+    "@mini-dokploy/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@mini-dokploy/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
