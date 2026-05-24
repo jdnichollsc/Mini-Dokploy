@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 
 import { ModeToggle } from "./mode-toggle";
@@ -6,8 +5,8 @@ import UserMenu from "./user-menu";
 
 export default function Header() {
   const links = [
-    { to: "/", label: "Home" },
-    { to: "/dashboard", label: "Dashboard" },
+    { to: "/deployments", label: "Deployments" },
+    { to: "/organizations", label: "Organizations" },
   ] as const;
 
   return (

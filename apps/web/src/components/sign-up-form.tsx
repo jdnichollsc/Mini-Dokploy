@@ -2,7 +2,7 @@ import { Button } from "@mini-dokploy/ui/components/button";
 import { Input } from "@mini-dokploy/ui/components/input";
 import { Label } from "@mini-dokploy/ui/components/label";
 import { useForm } from "@tanstack/react-form";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -29,7 +29,7 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
         },
         {
           onSuccess: () => {
-            router.push("/dashboard");
+            router.push("/organizations");
             toast.success("Sign up successful");
           },
           onError: (error) => {

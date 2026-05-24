@@ -1,3 +1,1 @@
-import { createAuthClient } from "better-auth/react";
-
-export const authClient = createAuthClient({});
+export { authClient, type AuthClient } from "@mini-dokploy/auth/client";

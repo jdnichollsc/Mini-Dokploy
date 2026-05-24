@@ -10,7 +10,7 @@ import {
 } from "@mini-dokploy/ui/components/dropdown-menu";
 import { Skeleton } from "@mini-dokploy/ui/components/skeleton";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 import { authClient } from "@/lib/auth-client";
 

@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@mini-dokploy/ui/components/button";
 import {
   DropdownMenu,
