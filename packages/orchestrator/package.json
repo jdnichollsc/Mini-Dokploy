@@ -1,0 +1,26 @@
+{
+  "name": "@mini-dokploy/orchestrator",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./docker": "./src/docker/index.ts",
+    "./git": "./src/git/clone.ts",
+    "./logs": "./src/logs.ts"
+  },
+  "dependencies": {
+    "@mini-dokploy/ai": "workspace:*",
+    "@mini-dokploy/core": "workspace:*",
+    "@mini-dokploy/db": "workspace:*",
+    "@mini-dokploy/env": "workspace:*",
+    "dockerode": "^4.0.9",
+    "simple-git": "^3.28.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@mini-dokploy/config": "workspace:*",
+    "@types/dockerode": "^3.3.34",
+    "typescript": "catalog:"
+  }
+}
