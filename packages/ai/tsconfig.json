@@ -1,0 +1,4 @@
+{
+  "extends": "@mini-dokploy/config/tsconfig.base.json",
+  "include": ["src/**/*.ts"]
+}
