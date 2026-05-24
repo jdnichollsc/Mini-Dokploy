@@ -1,0 +1,26 @@
+{
+  "skill_name": "traefik",
+  "evals": [
+    {
+      "id": 0,
+      "name": "compose-setup",
+      "prompt": "I'm working on mini-dokploy (a tiny Heroku clone — TS + Next.js + tRPC, monorepo with turborepo). The task spec says explicitly: 'Docker services (not docker run / not plain compose) for orchestration — both Mini-Dokploy itself and user deployments.' The root docker-compose.yml currently has just a postgres `db` service. I want Traefik wired in so it auto-discovers the user *services* my API will create at runtime. Local-only for now — deployments reachable at `app-abc123.127.0.0.1.sslip.io` without /etc/hosts edits. Dashboard on :8080 while developing. Show me: (a) the new Traefik service block for the stack file (ready to paste), (b) the one-time bootstrap commands needed before `docker stack deploy`, and (c) anything I need to change on the existing db service.",
+      "expected_output": "A stack-file `traefik` service block using Traefik's swarm provider (--providers.swarm=true), --providers.swarm.exposedbydefault=false, the overlay network pinned via --providers.swarm.network, a deploy block placing the task on a manager node, ports published in mode: host (not the default ingress), socket mounted read-only, dashboard exposed on :8080. The bootstrap commands must include `docker swarm init` and creation of the attachable overlay network. The db service needs a `deploy:` block and to join the same overlay; otherwise the new compose file with `external: true` network reference won't reach it. No use of docker.createContainer or docker run anywhere.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "label-generation",
+      "prompt": "In packages/api I need a function `buildTraefikLabels(deployment)` that, given `{ id, port, customLabels? }`, returns the Record<string,string> of labels for a Swarm service spec (Spec.Labels) that I pass to dockerode's `createService`. Each deployment lives at `app-<id>.${process.env.TRAEFIK_HOST_SUFFIX ?? '127.0.0.1.sslip.io'}` for local, `app-<id>.apps.example.com` in prod with TLS via a `le` cert resolver. Users can supply arbitrary `customLabels` from the UI. I'm worried about three concrete attacks: (1) hijacking another deployment by setting `traefik.http.routers.app-victim.rule=Host(...)`, (2) hijacking via their own router by setting `traefik.http.routers.app-<theirid>.rule=Host(`victim.example.com`)`, (3) exposing an internal port by setting `traefik.http.services.app-<theirid>.loadbalancer.server.port=22`. Write the function so all three are blocked, plus give me a one-sentence threat model and the test names I should add.",
+      "expected_output": "A TypeScript function that: (a) validates the id against a DNS-label-safe regex and rejects bad input, (b) generates traefik.enable=true + a Host(...) router rule on TRAEFIK_HOST_SUFFIX + entrypoint from TRAEFIK_ENTRYPOINT + service binding + loadbalancer.server.port + ownership label, (c) conditionally adds TLS labels when TRAEFIK_CERT_RESOLVER is set, (d) filters customLabels with an explicit reject for: same-deployment .rule, .service, .entrypoints, .priority, .tls* on own router; .loadbalancer.server.port and friends on own service; any other deployment's router/service; traefik.enable; traefik.tcp.*; traefik.udp.*; middlewares not namespaced under the deployment id. Threat-model sentence covers all three attack classes. Test name list covers cross-tenant hijack, self-hijack of rule, port re-keying, entrypoint change, and middleware namespace enforcement.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "404-debugging",
+      "prompt": "I just deployed a user service via mini-dokploy (Traefik v3.2 + Swarm provider running as part of the dokploy stack). `docker service ls` shows the service is running with 1/1 replicas, Traefik is up, but `curl http://app-xyz.127.0.0.1.sslip.io` returns Traefik's '404 page not found' HTML. What's the diagnostic order I should follow to figure out what's wrong? Give me a numbered checklist with the exact commands to run at each step and what each result tells me.",
+      "expected_output": "A numbered diagnostic checklist that, in roughly this order: (1) confirms the 404 is from Traefik by checking the response body; (2) inspects the service spec for traefik.enable=true *on Spec.Labels* and explicitly calls out the trap of putting labels on TaskTemplate.ContainerSpec.Labels; (3) confirms the service is on the same overlay as Traefik (docker network inspect dokploy-network, and a note about --providers.swarm.network); (4) queries Traefik's API for routers (curl localhost:8080/api/http/routers); (5) verifies the Host rule matches the request Host header (curl -H Host); (6) differentiates 404 (no router matched) from 502/504 (router matched, backend unreachable); (7) checks Traefik task placement (docker service ps dokploy_traefik) for manager-constraint failures. Should mention the dashboard at localhost:8080 as a visual aid.",
+      "files": []
+    }
+  ]
+}
