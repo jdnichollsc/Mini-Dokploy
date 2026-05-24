@@ -2,21 +2,24 @@
   "name": "@mini-dokploy/api",
   "type": "module",
   "exports": {
-    ".": {
-      "default": "./src/index.ts"
-    },
-    "./*": {
-      "default": "./src/*.ts"
-    }
+    ".": "./src/index.ts",
+    "./context": "./src/context.ts",
+    "./routers": "./src/routers/index.ts",
+    "./routers/index": "./src/routers/index.ts",
+    "./routers/*": "./src/routers/*.ts"
   },
   "scripts": {},
   "dependencies": {
+    "@mini-dokploy/ai": "workspace:*",
     "@mini-dokploy/auth": "workspace:*",
+    "@mini-dokploy/core": "workspace:*",
     "@mini-dokploy/db": "workspace:*",
     "@mini-dokploy/env": "workspace:*",
+    "@mini-dokploy/workflow-client": "workspace:*",
     "@trpc/client": "catalog:",
     "@trpc/server": "catalog:",
     "dotenv": "catalog:",
+    "drizzle-orm": "^0.45.1",
     "next": "catalog:",
     "zod": "catalog:"
   },
