@@ -24,8 +24,8 @@ build
 *~
 .DS_Store
 
-# Logs
-logs
+# Logs (only top-level /logs/, not e.g. apps/web/src/pages/api/ws/logs/)
+/logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -55,6 +55,7 @@ temp
 
 # Project-private (not committed)
 TASK.md
+.devin/
 
 # Runtime data
 local.db*
