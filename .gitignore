@@ -43,9 +43,21 @@ lerna-debug.log*
 # Testing
 coverage
 .nyc_output
+playwright-report/
+test-results/
+tests/e2e/.artifacts/
 
 # Misc
 *.tgz
 .cache
 tmp
 temp
+
+# Project-private (not committed)
+TASK.md
+
+# Runtime data
+local.db*
+.e2e.db*
+.dokploy-logs/
+.dokploy-builds/
