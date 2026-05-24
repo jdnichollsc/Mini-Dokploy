@@ -1,0 +1,17 @@
+{
+  "name": "@mini-dokploy/workflow-client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@mini-dokploy/core": "workspace:*",
+    "@temporalio/client": "^1.13.1"
+  },
+  "devDependencies": {
+    "@mini-dokploy/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
