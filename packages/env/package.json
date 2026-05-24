@@ -4,8 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./db": "./src/db.ts",
     "./server": "./src/server.ts",
-    "./web": "./src/web.ts"
+    "./web": "./src/web.ts",
+    "./worker": "./src/worker.ts"
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.1",
