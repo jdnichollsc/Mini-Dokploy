@@ -5,7 +5,7 @@ import { dirname, resolve } from "node:path";
 // inherit stale users/orgs from a previous invocation.
 //
 // IMPORTANT: t3-env's `createEnv` captures `process.env` at import time,
-// so we MUST set DATABASE_URL *before* the first import of any module that
+// so DATABASE_URL MUST be set *before* the first import of any module that
 // transitively imports `@mini-dokploy/env/db` — hence the dynamic import.
 export default async function globalSetup() {
   if (process.env.E2E_FULL_STACK === "1") return;

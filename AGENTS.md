@@ -128,8 +128,8 @@ pnpm temporal:down                        # stop Temporal compose
   remove the proxy — Traefik breaks without it on Docker engine 29+.
 - **Docker Desktop port forwarding sometimes wedges.** Symptoms: TCP
   connects work but HTTP/gRPC handshakes hang. Fix: quit + reopen Docker
-  Desktop. (Not our code.)
-- **Stale `apps/*/.env` files** override our root `.env` because Next.js
+  Desktop. (Not a repo-side bug.)
+- **Stale `apps/*/.env` files** override the root `.env` because Next.js
   auto-loads them. `load-env.ts` uses `override: true` to win, but it's
   safer to keep only one `.env` at the repo root.
 - **Relative `file:./local.db`** resolves per-process cwd. Always rely on
@@ -164,7 +164,7 @@ pnpm temporal:down                        # stop Temporal compose
 - Push images to a registry (built locally via `docker buildx --load`).
 - Persist Temporal across `pnpm stack:down` resets unless `temporal_postgres_data` volume is kept.
 
-See "What I'd build next" in `README.md` for the post-MVP roadmap.
+See "Future work" in `README.md` for the post-MVP roadmap.
 
 ## Quick sanity checklist before opening a PR
 

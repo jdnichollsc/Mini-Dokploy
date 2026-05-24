@@ -3,8 +3,8 @@ import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 export async function createContext({ req }: CreateNextContextOptions) {
   // BetterAuth's `getSession` expects a Fetch-style Headers object. The Pages
-  // Router gives us a Node IncomingMessage with a plain header bag, so we
-  // adapt it here.
+  // Router provides a Node IncomingMessage with a plain header bag, so adapt
+  // it here.
   const headers = new Headers();
   for (const [key, value] of Object.entries(req.headers)) {
     if (Array.isArray(value)) {

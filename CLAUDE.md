@@ -38,7 +38,7 @@ This file only adds Claude-Code-specific guidance.
 
 ## Things to not say or do
 
-- Don't suggest `docker run` for user deployments. The brief mandates Docker Swarm services — we use `dockerode.createService` for user apps and `docker stack deploy` for mini-dokploy itself.
+- Don't suggest `docker run` for user deployments. The brief mandates Docker Swarm services — use `dockerode.createService` for user apps and `docker stack deploy` for mini-dokploy itself.
 - Don't suggest `dokku/smoke-test-app` as a test repo — it's buildpack-only, no Dockerfile. Use `docker/welcome-to-docker` instead.
 - Don't auto-populate branch as `main` — many older repos default to `master`. Check the upstream first.
 - Don't claim a feature is shipped because it typechecks. Verify with the smoke test or by exercising the UI.

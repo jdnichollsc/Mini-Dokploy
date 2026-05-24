@@ -9,8 +9,8 @@ test.describe("Authentication", () => {
     // because the protected procedure short-circuits.
     await page.goto("/");
     await page.waitForURL(/\/deployments/);
-    // Either we see the "Select organization" prompt (FORBIDDEN) or the
-    // empty deployments table. Both are valid post-redirect states.
+    // Either the "Select organization" prompt (FORBIDDEN) or the empty
+    // deployments table is shown. Both are valid post-redirect states.
     await expect(page.getByText(/select an organization first|new deployment/i)).toBeVisible();
   });
 

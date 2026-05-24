@@ -25,7 +25,7 @@ The remainder of this document describes general principles to follow when build
 
 - activity: call_llm
   - inputs:
-    - model_id -> internally activity can route to different models, so we don't need 1 activity per unique model.
+    - model_id -> internally activity can route to different models, so don't need 1 activity per unique model.
     - prompt / chat history
     - tools
     - etc.

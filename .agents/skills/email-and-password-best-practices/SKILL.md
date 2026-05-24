@@ -175,7 +175,7 @@ const { data, error } = await authClient.requestPasswordReset({
 });
 ```
 
-**Note**: While the `email` is required, we also recommend configuring the `redirectTo` for a smoother user experience.
+**Note**: While the `email` is required, it's recommended configuring the `redirectTo` for a smoother user experience.
 
 ## Password Hashing
 

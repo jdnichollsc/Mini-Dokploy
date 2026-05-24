@@ -198,7 +198,6 @@ pnpm stack:down       # tear down
 | Symptom | Likely fix |
 |---|---|
 | `pnpm dev` says "Docker daemon is not reachable" | Start Docker Desktop. On macOS: `open -a Docker`. |
-| Bootstrap hangs at "Waiting for Temporal to be healthy" | Docker Desktop port forwarding stuck. Quit + re-open Docker Desktop. (We hit this during development; the engine accepts TCP fine but HTTP/gRPC handshakes time out — restart fixes it.) |
 | `EADDRINUSE :::3001` | A stray Next dev server is holding the port. `kill $(lsof -ti tcp:3001)`. |
 | Deployment status stuck on `failed` | Open `/deployments/[id]`, read **failureReason** in the run history. If `Remote branch <X> not found in upstream origin`, the repo's default branch isn't `main` — set it explicitly (most older repos use `master`). |
 | 404 on `app-<id>.127.0.0.1.sslip.io` | Traefik hasn't picked up the router yet. Check <http://localhost:8081/api/http/routers> — should list `app-<id>@swarm`. If missing, `docker service logs dokploy-traefik`. |
@@ -271,13 +270,13 @@ compose can join them too):
 
 ---
 
-## Tradeoffs and what I'd build next
+## Tradeoffs and future work
 
 **Done deliberately, not by accident:**
 
 - **Pages Router** (the brief required it). The Better-T-Stack scaffold
-  started us on App Router; we migrated the tRPC adapter, BetterAuth
-  handler, and the trpc/next client together as one bundle.
+  started on App Router; the migration covered the tRPC adapter, the
+  BetterAuth handler, and the trpc/next client together as one bundle.
 - **Hybrid orchestration**: plain `docker compose` for Temporal infra (the
   upstream layout is battle-tested with this) and Docker Swarm for Mini-
   Dokploy itself + user deployments. The brief mandated "Docker services,
@@ -293,18 +292,18 @@ compose can join them too):
 - **Single-replica web + worker**, so the file-tailed WebSocket logs and the
   shared SQLite file work without Redis pub/sub or libsql-server.
 
-**What I'd build next** (cut list from `docs/PLAN.md` §16):
+**Future work** (cut list from `docs/PLAN.md` §16):
 
 - **Multi-replica logs**: Redis pub/sub keyed by `runId` so any web replica
   can serve the stream.
 - **Private registry** in the Swarm stack so multi-node deployments can
-  schedule on workers (currently we assume single-node manager).
+  schedule on workers (the current design assumes a single-node manager).
 - **BuildKit cache mount** in the worker to drastically speed up Docker
   builds across redeploys.
 - **More builders** beyond Dockerfile (nixpacks, buildpacks) — mirrors the
   reference Dokploy.
-- **Real reconciliation** instead of the narrow "DB row inserted but
-  workflow.start threw" race we currently handle.
+- **Real reconciliation** beyond the narrow "DB row inserted but
+  workflow.start threw" race that is currently handled.
 - **OAuth providers** in BetterAuth (GitHub, Google) + invitation emails.
 - **Per-deployment first-class middlewares** field (rate limit, basic auth,
   IP allowlist) that maps to namespaced Traefik labels — safer than the
@@ -312,27 +311,28 @@ compose can join them too):
 
 ---
 
-## How I used AI tools
+## AI tooling usage
 
 **Used Claude (this repo was built with Claude Code):**
 
-- Drafting and reviewing the implementation plan in `docs/PLAN.md`. Ran it
-  through the bundled `/seldon` skill twice as an independent reviewer; each
-  pass surfaced concrete architectural gaps (network model, scope, package
-  boundaries, migration strategy) that shaped the final layout.
+- Drafting and reviewing the implementation plan in `docs/PLAN.md`. The
+  plan went through the bundled `/seldon` skill twice as an independent
+  reviewer; each pass surfaced concrete architectural gaps (network model,
+  scope, package boundaries, migration strategy) that shaped the final
+  layout.
 - Generating boilerplate for the new packages (`core`, `ai`, `orchestrator`,
   `workflow-client`, `worker`) — TypeScript scaffolding is repetitive and AI
-  hands it to you faster than a snippet library.
+  delivers it faster than a snippet library.
 - Writing the hardened Traefik label filter and its tenant-hijack test
   cases. The `/traefik` skill was the source of truth; the function was
   copied near-verbatim because the threat model is load-bearing.
 - Wiring the Pages Router migration as a single coordinated change (tRPC
   adapter swap + BetterAuth handler + context signature + `_app.tsx`).
 
-**Didn't use AI for:**
+**Did not use AI for:**
 
-- Picking technical direction. The plan was a back-and-forth with the user
-  about real trade-offs (router choice, DB choice, AI scope, orchestration
+- Picking technical direction. The plan emerged from a back-and-forth about
+  real trade-offs (router choice, DB choice, AI scope, orchestration
   model). The AI helped articulate options; the human made the calls.
 - The `docker-compose.yml` Temporal layout. That came from the upstream
   Temporal docker-compose repo, lightly adapted (named volume, overlay
@@ -340,7 +340,8 @@ compose can join them too):
 - The DNS-safe ID strategy (`nanoid` with lowercase-alphanumeric alphabet).
   Standard practice, no AI needed.
 - The Pages-Router-specific BetterAuth handler (`toNodeHandler` +
-  `config.api.bodyParser = false`). That's just reading BetterAuth's docs.
+  `config.api.bodyParser = false`). That comes straight from BetterAuth's
+  docs.
 
 The prompts and conversational history (including each rejected plan
-revision) are in the commit log of this repo if you want the deeper trail.
+revision) are in the commit log of this repo for the deeper trail.

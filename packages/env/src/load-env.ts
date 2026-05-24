@@ -3,7 +3,7 @@ import { dirname, isAbsolute, resolve } from "node:path";
 
 import { config } from "dotenv";
 
-// Walk up from CWD looking for the first .env we can find, then load it.
+// Walk up from CWD looking for the first .env reachable, then load it.
 // Also anchor relative paths (DATABASE_URL, DOKPLOY_LOG_DIR, DOKPLOY_BUILD_DIR)
 // to the directory containing .env so every process (web, worker, migrator)
 // points at the same files regardless of where it was launched from.
@@ -38,8 +38,9 @@ if (found) {
   const dbUrl = process.env.DATABASE_URL;
   if (dbUrl) {
     const match = dbUrl.match(/^file:(\.{1,2}\/[^?]+)(\?.*)?$/);
-    if (match) {
-      const [, relPath, suffix = ""] = match;
+    if (match && match[1]) {
+      const relPath = match[1];
+      const suffix = match[2] ?? "";
       process.env.DATABASE_URL = `file:${resolve(envDir, relPath)}${suffix}`;
     }
   }

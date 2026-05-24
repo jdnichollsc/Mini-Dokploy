@@ -58,7 +58,7 @@ done
 # --- 5. Migrations -------------------------------------------------------
 # Load the repo-root .env into this shell and pass DATABASE_URL through
 # explicitly. Belt-and-braces: packages/env/load-env.ts also walks up looking
-# for .env, but doing it here means we never depend on cwd resolution.
+# for .env, but doing it here removes the dependency on cwd resolution.
 set -a
 . ./.env
 set +a

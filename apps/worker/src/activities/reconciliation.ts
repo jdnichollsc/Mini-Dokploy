@@ -28,7 +28,7 @@ export async function reconcileStuckRuns(): Promise<void> {
       .where(eq(deploymentRun.runId, row.runId));
 
     // Roll the parent deployment back to a sane status. If the trigger was
-    // destroy we leave it stopped; otherwise mark failed so the UI surfaces
+    // destroy, leave it stopped; otherwise mark failed so the UI surfaces
     // the issue prominently.
     const target = row.trigger === "destroy" ? "stopped" : "failed";
     await db

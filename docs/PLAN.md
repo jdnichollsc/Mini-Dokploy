@@ -52,7 +52,7 @@ mini-dokploy/
 │   ├── web/                              # Next.js Pages Router + tRPC
 │   │   ├── Dockerfile                    # node:22-bookworm-slim, multi-stage → mini-dokploy/web:latest
 │   │   ├── docker-entrypoint.sh          # runs `pnpm -F @mini-dokploy/db migrate` then `node server.js`
-│   │   ├── next.config.ts                # output: "standalone"  (so we get a runnable server.js)
+│   │   ├── next.config.ts                # output: "standalone"  (produces a runnable server.js)
 │   │   ├── src/pages/
 │   │   │   ├── _app.tsx, _document.tsx
 │   │   │   ├── index.tsx                 # SSR redirect to /deployments
@@ -163,7 +163,7 @@ Changes from current file:
 - Bind-mounts `./deployment/scripts/temporal` → `./scripts/temporal` (moves into repo
   root for clarity; matches the planned layout).
 - `DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development.yaml` →
-  `…/development-sql.yaml` (matches the file we'll ship).
+  `…/development-sql.yaml` (matches the file shipped in `dynamicconfig/`).
 - Postgres data: anonymous `/var/lib/postgresql/data` → **named** volume
   `temporal_postgres_data` so `compose down` doesn't lose Temporal history.
 - Adds `temporal-ui` (already in user's example).

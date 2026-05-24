@@ -4,7 +4,7 @@ import { gitClone as orchestratorGitClone } from "@mini-dokploy/orchestrator";
 import type { CloneInput } from "@mini-dokploy/orchestrator";
 
 export async function gitClone(input: CloneInput) {
-  // Heartbeat once so Temporal knows we're alive; the clone itself is fast.
+  // Heartbeat once so Temporal sees the activity is alive; the clone is fast.
   Context.current().heartbeat();
   return orchestratorGitClone(input);
 }

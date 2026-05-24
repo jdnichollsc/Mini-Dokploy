@@ -23,7 +23,7 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
 });
 
 // Tenant-scoped procedure: requires an active organization. Every deployment
-// query/mutation must inherit from this so we never leak cross-tenant data.
+// query/mutation must inherit from this so cross-tenant data never leaks.
 export const orgScopedProcedure = protectedProcedure.use(({ ctx, next }) => {
   const activeOrgId = ctx.session.session.activeOrganizationId;
   if (!activeOrgId) {

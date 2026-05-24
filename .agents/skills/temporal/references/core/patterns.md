@@ -243,7 +243,7 @@ workflow.execute_activity(
 )
 ```
 
-To ensure that polling_activity is restarted in a timely manner, we make sure that it heartbeats on every iteration. Note that heartbeating only works if we set the heartbeat_timeout to a shorter value than the Activity start_to_close_timeout timeout
+To ensure that polling_activity is restarted in a timely manner, let's make sure that it heartbeats on every iteration. Note that heartbeating only works if setting the heartbeat_timeout to a shorter value than the Activity start_to_close_timeout timeout
 
 **Advantage:** Because the polling loop is inside the activity, this does not pollute the workflow history.
 
