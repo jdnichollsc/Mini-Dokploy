@@ -1,0 +1,29 @@
+{
+  "name": "worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mini-dokploy/core": "workspace:*",
+    "@mini-dokploy/db": "workspace:*",
+    "@mini-dokploy/env": "workspace:*",
+    "@mini-dokploy/orchestrator": "workspace:*",
+    "@mini-dokploy/workflow-client": "workspace:*",
+    "@temporalio/activity": "^1.13.1",
+    "@temporalio/worker": "^1.13.1",
+    "@temporalio/workflow": "^1.13.1",
+    "drizzle-orm": "^0.45.1",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@mini-dokploy/config": "workspace:*",
+    "@types/node": "^22.13.14",
+    "tsx": "^4.19.2",
+    "typescript": "catalog:"
+  }
+}
