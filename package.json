@@ -7,10 +7,22 @@
   ],
   "type": "module",
   "scripts": {
-    "dev": "turbo dev",
+    "swarm:init": "bash scripts/swarm-init.sh",
+    "net:up": "bash scripts/network-up.sh",
+    "temporal:up": "bash scripts/temporal-up.sh",
+    "temporal:down": "bash scripts/temporal-down.sh",
+    "build:images": "bash scripts/build-images.sh",
+    "stack:up": "bash scripts/stack-up.sh",
+    "stack:down": "bash scripts/stack-down.sh",
+    "bootstrap": "bash scripts/bootstrap.sh",
+    "dev": "pnpm bootstrap && turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
+    "test": "turbo test",
+    "test:e2e": "playwright test",
+    "test:e2e:full": "E2E_FULL_STACK=1 playwright test --grep @slow",
     "dev:web": "turbo -F web dev",
+    "dev:worker": "turbo -F worker dev",
     "db:push": "turbo -F @mini-dokploy/db db:push",
     "db:studio": "turbo -F @mini-dokploy/db db:studio",
     "db:generate": "turbo -F @mini-dokploy/db db:generate",
@@ -18,12 +30,14 @@
     "db:local": "turbo -F @mini-dokploy/db db:local"
   },
   "dependencies": {
+    "@mini-dokploy/db": "workspace:*",
     "@mini-dokploy/env": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@mini-dokploy/config": "workspace:*",
+    "@playwright/test": "^1.60.0",
     "@types/node": "^22.13.14",
     "turbo": "^2.8.12",
     "typescript": "catalog:"
