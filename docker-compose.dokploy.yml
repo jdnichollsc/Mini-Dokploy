@@ -1,0 +1,87 @@
+# Mini-Dokploy Swarm stack. Deployed via: pnpm stack:up
+# Requires the dokploy-network and temporal-network overlays to exist
+# (created by scripts/network-up.sh).
+
+services:
+  traefik:
+    image: traefik:v3.2
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--providers.swarm=true"
+      - "--providers.swarm.exposedbydefault=false"
+      - "--providers.swarm.network=dokploy-network"
+      - "--providers.swarm.refreshseconds=5"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 8080
+        published: 8080
+        mode: host
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks: [dokploy-network]
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+
+  web:
+    image: mini-dokploy/web:latest
+    environment:
+      IN_CONTAINER: "1"
+      PORT: "3001"
+      HOSTNAME: "0.0.0.0"
+      DATABASE_URL: "file:/data/local.db"
+      TEMPORAL_ADDRESS: "temporal:7233"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      DOKPLOY_LOG_DIR: "/data/logs"
+      DOKPLOY_HOST_SUFFIX: "${DOKPLOY_HOST_SUFFIX:-127.0.0.1.sslip.io}"
+      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET}"
+      BETTER_AUTH_URL: "http://dokploy.${DOKPLOY_HOST_SUFFIX:-127.0.0.1.sslip.io}"
+      CORS_ORIGIN: "http://dokploy.${DOKPLOY_HOST_SUFFIX:-127.0.0.1.sslip.io}"
+    volumes:
+      - dokploy-data:/data
+    networks: [dokploy-network, temporal-network]
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dokploy.rule=Host(`dokploy.127.0.0.1.sslip.io`)"
+        - "traefik.http.routers.dokploy.entrypoints=web"
+        - "traefik.http.routers.dokploy.service=dokploy"
+        - "traefik.http.services.dokploy.loadbalancer.server.port=3001"
+
+  worker:
+    image: mini-dokploy/worker:latest
+    environment:
+      IN_CONTAINER: "1"
+      DATABASE_URL: "file:/data/local.db"
+      TEMPORAL_ADDRESS: "temporal:7233"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      DOKPLOY_LOG_DIR: "/data/logs"
+      DOKPLOY_BUILD_DIR: "/data/builds"
+      DOKPLOY_OVERLAY: "dokploy-network"
+      DOKPLOY_HOST_SUFFIX: "${DOKPLOY_HOST_SUFFIX:-127.0.0.1.sslip.io}"
+    volumes:
+      - dokploy-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks: [dokploy-network, temporal-network]
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  dokploy-network:
+    external: true
+  temporal-network:
+    external: true
+
+volumes:
+  dokploy-data:
+    name: dokploy-data

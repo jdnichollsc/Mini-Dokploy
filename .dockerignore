@@ -1,0 +1,14 @@
+**/node_modules
+**/.next
+**/.turbo
+**/dist
+**/.git
+**/.env
+**/.env.local
+**/local.db*
+.dokploy-logs
+.dokploy-builds
+.devin
+.agents
+.claude
+docs
