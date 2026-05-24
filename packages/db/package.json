@@ -2,19 +2,17 @@
   "name": "@mini-dokploy/db",
   "type": "module",
   "exports": {
-    ".": {
-      "default": "./src/index.ts"
-    },
-    "./*": {
-      "default": "./src/*.ts"
-    }
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts",
+    "./schema/*": "./src/schema/*.ts",
+    "./migrate": "./src/migrate.ts"
   },
   "scripts": {
     "db:local": "turso dev --db-file local.db",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "tsx src/migrate.ts"
   },
   "dependencies": {
     "@libsql/client": "catalog:",
@@ -27,6 +25,7 @@
   "devDependencies": {
     "@mini-dokploy/config": "workspace:*",
     "drizzle-kit": "^0.31.8",
+    "tsx": "^4.22.3",
     "typescript": "catalog:"
   }
 }

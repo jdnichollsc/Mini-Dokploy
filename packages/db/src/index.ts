@@ -1,5 +1,5 @@
 import { createClient } from "@libsql/client";
-import { env } from "@mini-dokploy/env/server";
+import { env } from "@mini-dokploy/env/db";
 import { drizzle } from "drizzle-orm/libsql";
 
 import * as schema from "./schema";
