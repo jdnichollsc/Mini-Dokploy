@@ -1,0 +1,25 @@
+{
+  "name": "@mini-dokploy/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./traefik": "./src/traefik/labels.ts",
+    "./ids": "./src/ids.ts",
+    "./schemas": "./src/schemas.ts",
+    "./status": "./src/status.ts"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "nanoid": "^5.1.6",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@mini-dokploy/config": "workspace:*",
+    "typescript": "catalog:",
+    "vitest": "^2.1.9"
+  }
+}
