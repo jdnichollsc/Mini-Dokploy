@@ -8,10 +8,6 @@ Plan and trade-offs are in [`docs/PLAN.md`](./docs/PLAN.md).
 
 ## System at a glance
 
-![Mini-Dokploy architecture](./docs/img/architecture.svg)
-
-<details><summary>Mermaid source</summary>
-
 ```mermaid
 flowchart LR
   user(["You"])
@@ -61,8 +57,6 @@ flowchart LR
   class ai ext
 ```
 
-</details>
-
 Key flows:
 - **You create a deployment** → tRPC mutation writes the row → starts a Temporal workflow → worker picks it up → `gitClone → dockerBuild → dockerDeploy` activities → Swarm runs a new `app-<id>` service with Traefik labels.
 - **A visitor hits the URL** → Traefik (Swarm service, port 80) matches the `Host: app-<id>.127.0.0.1.sslip.io` header → forwards to the user's container on the overlay network. No restart, no DNS, no config files.
@@ -110,7 +104,7 @@ When it finishes you should see:
 ### First-time deploy — `welcome-to-docker`
 
 A 60-second smoke walkthrough. Use these **exact values** the first time so
-you can see all features working before customising.
+you can see all features working before customizing.
 
 1. Visit <http://localhost:3001>. You'll be redirected to **Sign Up**.
 2. Sign up with any email + password (BetterAuth keeps it local in SQLite).
